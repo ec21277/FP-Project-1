@@ -13,21 +13,12 @@ import Database.SQLite.Simple
 
 createTables :: IO Connection
 createTables = do
-        conn <- open "covid.sqlite"
+        conn <- open "student_data.sqlite"
         execute_ conn "CREATE TABLE IF NOT EXISTS studentData (\
             \roll_no INT NOT NULL PRIMARY KEY, \
             \gender VARCHAR(6) NOT NULL, \
             \ethnicity VARCHAR(50) NOT NULL, \
             \parental_level_of_education VARCHAR(20) DEFAULT NULL \
-            \)"
-        execute_ conn "CREATE TABLE IF NOT EXISTS entries (\
-            \date VARCHAR(40) NOT NULL, \
-            \day VARCHAR(40) NOT NULL, \
-            \month VARCHAR(40) NOT NULL, \
-            \year VARCHAR(40) NOT NULL, \
-            \cases INT DEFAULT NULL, \
-            \deaths INT DEFAULT NULL, \
-            \fk_country INTEGER\
             \)"
         return conn
 
@@ -47,25 +38,26 @@ createTables = do
 --     -- }
 --     -- execute conn "INSERT INTO entries VALUES (?,?,?,?,?,?,?)" record
 
-instance ToRow Record where
-    toRow (Record roll_no gender ethnicity parental_level_of_education)
+instance ToRow StudentPersonalDetails where
+    toRow (StudentPersonalDetails roll_no gender ethnicity parental_level_of_education)
         = toRow (roll_no, gender, ethnicity, parental_level_of_education)
 
-insertRows :: Connection -> Record -> IO ()
+insertRows :: Connection -> StudentPersonalDetails -> IO ()
 insertRows conn record = do
     
-    let entry = Record {
+    let entry = StudentPersonalDetails {
         roll_no = roll_no record,
         gender = gender record,
         ethnicity = ethnicity record,
         parental_level_of_education = parental_level_of_education record
     
     }
+    execute_ conn "DELETE FROM studentData"
     execute conn "INSERT INTO studentData VALUES (?,?,?,?)" entry
     print "s"
 
 
-saveRecords :: Connection -> [Record] -> IO ()
+saveRecords :: Connection -> [StudentPersonalDetails] -> IO ()
 saveRecords conn = mapM_ (insertRows conn)
 
 
