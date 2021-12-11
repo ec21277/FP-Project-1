@@ -47,25 +47,26 @@ createTables = do
 --     -- }
 --     -- execute conn "INSERT INTO entries VALUES (?,?,?,?,?,?,?)" record
 
-instance ToRow Record where
-    toRow (Record roll_no gender ethnicity parental_level_of_education)
+instance ToRow StudentPersonalDetails where
+    toRow (StudentPersonalDetails roll_no gender ethnicity parental_level_of_education)
         = toRow (roll_no, gender, ethnicity, parental_level_of_education)
 
-insertRows :: Connection -> Record -> IO ()
+insertRows :: Connection -> StudentPersonalDetails -> IO ()
 insertRows conn record = do
     
-    let entry = Record {
+    let entry = StudentPersonalDetails {
         roll_no = roll_no record,
         gender = gender record,
         ethnicity = ethnicity record,
         parental_level_of_education = parental_level_of_education record
     
     }
+    execute_ conn "DELETE FROM studentData"
     execute conn "INSERT INTO studentData VALUES (?,?,?,?)" entry
     print "s"
 
 
-saveRecords :: Connection -> [Record] -> IO ()
+saveRecords :: Connection -> [StudentPersonalDetails] -> IO ()
 saveRecords conn = mapM_ (insertRows conn)
 
 
