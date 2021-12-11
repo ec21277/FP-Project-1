@@ -2,7 +2,8 @@
 
 module DBFunctions (
     createTables,
-    saveRecords
+    saveRecords,
+    saveStudentBackgroundRecords
 ) where 
 
 import DataModel
@@ -10,42 +11,23 @@ import Database.SQLite.Simple
 
 
 
-
 createTables :: IO Connection
 createTables = do
-        conn <- open "covid.sqlite"
+        conn <- open "studentData.sqlite"
         execute_ conn "CREATE TABLE IF NOT EXISTS studentData (\
             \roll_no INT NOT NULL PRIMARY KEY, \
             \gender VARCHAR(6) NOT NULL, \
             \ethnicity VARCHAR(50) NOT NULL, \
             \parental_level_of_education VARCHAR(20) DEFAULT NULL \
             \)"
-        execute_ conn "CREATE TABLE IF NOT EXISTS entries (\
-            \date VARCHAR(40) NOT NULL, \
-            \day VARCHAR(40) NOT NULL, \
-            \month VARCHAR(40) NOT NULL, \
-            \year VARCHAR(40) NOT NULL, \
-            \cases INT DEFAULT NULL, \
-            \deaths INT DEFAULT NULL, \
-            \fk_country INTEGER\
+        conn <- open "studentBackgroundDetails.sqlite"
+        execute_ conn "CREATE TABLE IF NOT EXISTS studentBackgroundDetails (\
+            \lunch VARCHAR(20) NOT NULL, \
+            \parental_level_of_education VARCHAR(20) NOT NULL, \
+            \roll_no INT NOT NULL \
             \)"
         return conn
 
-
--- insertRows :: Connection -> Record -> IO ()
--- insertRows conn record = do
---     print "SomeShit"
---     -- country <- getOrCreateCountry conn (country record) (continent record) (population record)
---     -- let record = Record {
---     --     gender = gender record,
---     --     day_ = day record,
---     --     month_ = month record,
---     --     year_ = year record,
---     --     cases_ = cases record,
---     --     deaths_ = deaths record,
---     --     fk_country = id_ country
---     -- }
---     -- execute conn "INSERT INTO entries VALUES (?,?,?,?,?,?,?)" record
 
 instance ToRow StudentPersonalDetails where
     toRow (StudentPersonalDetails roll_no gender ethnicity parental_level_of_education)
@@ -66,8 +48,32 @@ insertRows conn record = do
     print "s"
 
 
+{-
+    REGION - Student Background 
+-}
+
+instance ToRow StudentBackgroundDetails where
+    toRow (StudentBackgroundDetails student_roll_no lunch test_preparation_course)
+        = toRow (student_roll_no, lunch, test_preparation_course)
+
+insertRowsForStudentBackgroundDetails :: Connection -> StudentBackgroundDetails -> IO ()
+insertRowsForStudentBackgroundDetails conn record = do
+    
+    let entry = StudentBackgroundDetails {
+        lunch = lunch record,
+        test_preparation_course= test_preparation_course record,
+        student_roll_no = student_roll_no record 
+    
+    }
+    execute_ conn "DELETE FROM studentBackgroundDetails"
+    execute conn "INSERT INTO studentBackgroundDetails VALUES (?,?,?)" entry
+    print "stu-bd"
+
 saveRecords :: Connection -> [StudentPersonalDetails] -> IO ()
 saveRecords conn = mapM_ (insertRows conn)
+
+saveStudentBackgroundRecords :: Connection -> [StudentBackgroundDetails] -> IO ()
+saveStudentBackgroundRecords conn = mapM_ (insertRowsForStudentBackgroundDetails conn)
 
 
 

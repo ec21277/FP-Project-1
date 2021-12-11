@@ -5,17 +5,16 @@ import Lib
 import System.IO
 import DBFunctions
 import DataModel
+import DBFunctions (saveStudentBackgroundRecords)
 
--- let URL1 = https://students.free.beeceptor.com/students
--- let glitchURL = "https://student-data-set.glitch.me/studentData"
 
 main :: IO ()
 main = do
     print "Initializing System..."
-    let url = "https://students.free.beeceptor.com/students"
+    let url = "https://student-data-set.herokuapp.com/StudentDataSet/get-student-data"
     response <- pullData url
     -- parsedData <- parseRequest response
-    print response
+    -- print response
     putStrLn "---------------------------------"
     putStrLn "  Welcome to our Student Data Project  "
     putStrLn "  (1) Download data              "
@@ -29,26 +28,37 @@ main = do
     option <- readLn :: IO Int
     case option of
         1 -> do
-            let url = "https://student-data-set.glitch.me/studentData"
             print "Downloading Student Data..."
-            response <- pullData url
-            print response
+            -- response <- pullData url
+            -- -- print response
+            -- json <- pullData url
+            -- print "Parsing..."
+            -- case (parseRequestToRecords json) of
+            --     Left err -> print err
+            --     Right details -> do
+            --         print "Saving on DB..."
+            --         -- print json
+            --         saveRecords conn (records details)
+            --         -- saveStudentBackgroundRecords conn (records details)
+            --         print "Saved!"
+            --         main
+     
+        2 -> do
+            print "Downloading Student background Data..."
             json <- pullData url
-            print "Parsing..."
-            case (parseRequestToRecords json) of
+            case (parseStudentBackgroundRequestToRecords json) of
                 Left err -> print err
-                Right details -> do
+                Right details1 -> do
                     print "Saving on DB..."
-                    print json
-                    saveRecords conn (records details)
+                    -- print json
+                    saveStudentBackgroundRecords conn (records details1)
                     print "Saved!"
                     main
-        -- 2 -> do
-        --     entries <- queryCountryAllEntries conn
-        --     mapM_ print entries
-        --     main
         -- 3 -> do
-        --     queryCountryTotalCases conn
-        --     main
+        --     print "student background details"
+             
         4 -> print "Hope you've enjoyed using the app!"
         otherwise -> print "Invalid option"
+
+
+        
