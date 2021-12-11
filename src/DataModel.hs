@@ -5,7 +5,9 @@ module DataModel(
     -- Record(..),
     -- Records(..),
     StudentPersonalDetails(..),
-    StudentPersonalDetailsGrouped(..)
+    StudentPersonalDetailsGrouped(..),
+    StudentScores(..),
+    StudentScoresGrouped(..)
 ) where
 import GHC.Generics
 
@@ -28,5 +30,16 @@ data StudentPersonalDetails = StudentPersonalDetails{
 } deriving (Show,Generic)
 
 data StudentPersonalDetailsGrouped = StudentPersonalDetailsGrouped{
-    records :: [StudentPersonalDetails]
+    records1 :: [StudentPersonalDetails]
+} deriving (Show,Generic)
+
+data StudentScores = StudentScores{
+    roll_no_sc :: Int,
+    math :: Int,
+    reading :: Int, 
+    writing :: Int
+}deriving(Show,Generic)
+
+data StudentScoresGrouped = StudentScoresGrouped{
+    records :: [StudentScores]
 } deriving (Show,Generic)

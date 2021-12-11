@@ -2,7 +2,9 @@
 
 module DBFunctions (
     createTables,
-    saveRecords
+    saveRecords,
+    saveRecordsScore
+    
 ) where 
 
 import DataModel
@@ -29,7 +31,15 @@ createTables = do
             \deaths INT DEFAULT NULL, \
             \fk_country INTEGER\
             \)"
+        execute_ conn "CREATE TABLE IF NOT EXISTS StudentScores (\
+            \roll_no_sc INT NOT NULL PRIMARY KEY, \
+            \math INT NOT NULL, \
+            \reading INT NOT NULL, \
+            \writing NOT NULL \
+            \)"
         return conn
+         
+
 
 
 -- insertRows :: Connection -> Record -> IO ()
@@ -74,3 +84,27 @@ saveRecords conn = mapM_ (insertRows conn)
 
 -- insertRowsAndReturnValues :: Connection -> [Record] -> IO ()
 -- insertRowsAndReturnValues conn = mapM_ (insertRows conn)
+
+
+
+instance ToRow StudentScores where
+    toRow (StudentScores roll_no_sc math reading writing)
+        = toRow (roll_no_sc, math,reading,writing)
+
+insertRowsScore :: Connection -> StudentScores -> IO ()
+insertRowsScore conn record2 = do
+    
+    let entry = StudentScores {
+        roll_no_sc = roll_no_sc record2,
+        math = math record2,
+        reading = reading record2,
+        writing = writing record2
+    
+    }
+    -- execute_ conn "DELETE FROM StudentScores"
+    execute conn "INSERT INTO StudentScores VALUES (?,?,?,?)" entry
+    print "s2"
+
+
+saveRecordsScore :: Connection -> [StudentScores] -> IO ()
+saveRecordsScore conn = mapM_ (insertRowsScore conn)
