@@ -11,11 +11,11 @@ import DataModel
 
 main :: IO ()
 main = do
+    putStrLn "---------------------------------"
     print "Initializing System..."
-    let url = "https://students.free.beeceptor.com/students"
+    putStrLn "---------------------------------"
+    let url = "https://student-data-set.herokuapp.com/StudentDataSet/get-student-data"
     response <- pullData url
-    -- parsedData <- parseRequest response
-    print response
     putStrLn "---------------------------------"
     putStrLn "  Welcome to our Student Data Project  "
     putStrLn "  (1) Download data              "
@@ -29,19 +29,25 @@ main = do
     option <- readLn :: IO Int
     case option of
         1 -> do
-            let url = "https://student-data-set.glitch.me/studentData"
-            print "Downloading Student Data..."
+            putStr "Downloading Student Data..."
             response <- pullData url
-            print response
+            -- print response
             json <- pullData url
+            print ""
             print "Parsing..."
             case (parseRequestToRecords json) of
                 Left err -> print err
                 Right details -> do
+                    
+                    print ""
+                    print "Removing old data "
+                    deleteOldEntries conn
+                    print " - Done"
                     print "Saving on DB..."
-                    print json
+                    -- print json
                     saveRecords conn (records details)
-                    print "Saved!"
+                    putStr "Saved!"
+                    -- getGenderRatio conn
                     main
         -- 2 -> do
         --     entries <- queryCountryAllEntries conn
