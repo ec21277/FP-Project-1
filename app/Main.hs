@@ -4,6 +4,7 @@ import Retrieve
 import Lib
 import System.IO
 import DBFunctions
+import DataModel
 
 -- let URL1 = https://students.free.beeceptor.com/students
 -- let glitchURL = "https://student-data-set.glitch.me/studentData"
@@ -34,13 +35,14 @@ main = do
             print response
             json <- pullData url
             print "Parsing..."
-            -- case (parseRequest json) of
-            --     Left err -> print err
-            --     Right recs -> do
-            --         print "Saving on DB..."
-            --         saveRecords conn (records recs)
-            --         print "Saved!"
-            --         main
+            case (parseRequestToRecords json) of
+                Left err -> print err
+                Right details -> do
+                    print "Saving on DB..."
+                    print json
+                    saveRecords conn (records details)
+                    print "Saved!"
+                    main
         -- 2 -> do
         --     entries <- queryCountryAllEntries conn
         --     mapM_ print entries

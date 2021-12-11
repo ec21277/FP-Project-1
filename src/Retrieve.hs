@@ -1,7 +1,7 @@
 module Retrieve
 (
     pullData,
-    parseRequest
+    parseRequestToRecords
 ) where
 
 
