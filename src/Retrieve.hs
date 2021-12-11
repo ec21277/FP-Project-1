@@ -19,13 +19,6 @@ pullData url = do
     response <- httpLBS request
     return $ getResponseBody response
 
-
-renameFields "date" = "dateRep"
-renameFields "continent" = "continentExp" 
-renameFields "country" = "countriesAndTerritories" 
-renameFields "population" = "popData2019"
-renameFields other = other
-
 customOptions = defaultOptions {
     fieldLabelModifier = renameFields
 }
