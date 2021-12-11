@@ -10,11 +10,11 @@ import DBFunctions (saveStudentBackgroundRecords)
 
 main :: IO ()
 main = do
+    putStrLn "---------------------------------"
     print "Initializing System..."
+    putStrLn "---------------------------------"
     let url = "https://student-data-set.herokuapp.com/StudentDataSet/get-student-data"
     response <- pullData url
-    -- parsedData <- parseRequest response
-    -- print response
     putStrLn "---------------------------------"
     putStrLn "  Welcome to our Student Data Project  "
     putStrLn "  (1) Download data              "
@@ -28,21 +28,25 @@ main = do
     option <- readLn :: IO Int
     case option of
         1 -> do
-            print "Downloading Student Data..."
-            -- response <- pullData url
-            -- -- print response
-            -- json <- pullData url
-            -- print "Parsing..."
-            -- case (parseRequestToRecords json) of
-            --     Left err -> print err
-            --     Right details -> do
-            --         print "Saving on DB..."
-            --         -- print json
-            --         saveRecords conn (records details)
-            --         -- saveStudentBackgroundRecords conn (records details)
-            --         print "Saved!"
-            --         main
-     
+            putStr "Downloading Student Data..."
+            response <- pullData url
+            -- print response
+            json <- pullData url
+            print ""
+            print "Parsing..."
+            case (parseRequestToRecords json) of
+                Left err -> print err
+                Right details -> do
+                    
+                    print ""
+                    print "Removing old data "
+                    deleteOldEntries conn
+                    print " - Done"
+                    print "Saving on DB..."
+                    -- print json
+                    -- saveRecords conn (records details)
+                    putStr "Saved!"
+                    -- getGenderRatio conn
         2 -> do
             print "Downloading Student background Data..."
             json <- pullData url
