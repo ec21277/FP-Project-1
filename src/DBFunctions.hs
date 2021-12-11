@@ -3,8 +3,10 @@
 module DBFunctions (
     createTables,
     saveRecords,
-    saveRecordsScore
-    
+    saveRecordsScore,
+    saveStudentBackgroundRecords,
+    getGenderRatio,
+    deleteOldEntries
 ) where 
 
 import DataModel
@@ -12,24 +14,20 @@ import Database.SQLite.Simple
 
 
 
-
 createTables :: IO Connection
 createTables = do
-        conn <- open "covid.sqlite"
+        conn <- open "studentData.sqlite"
         execute_ conn "CREATE TABLE IF NOT EXISTS studentData (\
             \roll_no INT NOT NULL PRIMARY KEY, \
             \gender VARCHAR(6) NOT NULL, \
             \ethnicity VARCHAR(50) NOT NULL, \
             \parental_level_of_education VARCHAR(20) DEFAULT NULL \
             \)"
-        execute_ conn "CREATE TABLE IF NOT EXISTS entries (\
-            \date VARCHAR(40) NOT NULL, \
-            \day VARCHAR(40) NOT NULL, \
-            \month VARCHAR(40) NOT NULL, \
-            \year VARCHAR(40) NOT NULL, \
-            \cases INT DEFAULT NULL, \
-            \deaths INT DEFAULT NULL, \
-            \fk_country INTEGER\
+        conn <- open "studentBackgroundDetails.sqlite"
+        execute_ conn "CREATE TABLE IF NOT EXISTS studentBackgroundDetails (\
+            \lunch VARCHAR(20) NOT NULL, \
+            \parental_level_of_education VARCHAR(20) NOT NULL, \
+            \roll_no INT NOT NULL \
             \)"
         execute_ conn "CREATE TABLE IF NOT EXISTS StudentScores (\
             \roll_no_sc INT NOT NULL PRIMARY KEY, \
@@ -41,21 +39,13 @@ createTables = do
          
 
 
-
--- insertRows :: Connection -> Record -> IO ()
--- insertRows conn record = do
---     print "SomeShit"
---     -- country <- getOrCreateCountry conn (country record) (continent record) (population record)
---     -- let record = Record {
---     --     gender = gender record,
---     --     day_ = day record,
---     --     month_ = month record,
---     --     year_ = year record,
---     --     cases_ = cases record,
---     --     deaths_ = deaths record,
---     --     fk_country = id_ country
---     -- }
---     -- execute conn "INSERT INTO entries VALUES (?,?,?,?,?,?,?)" record
+{-
+    Removes all old entries from the current tables. 
+    Only run if we call download data.
+-}
+deleteOldEntries  conn =do 
+     execute_ conn "DELETE FROM studentData"
+     execute_ conn "DELETE FROM entries"
 
 instance ToRow StudentPersonalDetails where
     toRow (StudentPersonalDetails roll_no gender ethnicity parental_level_of_education)
@@ -71,16 +61,47 @@ insertRows conn record = do
         parental_level_of_education = parental_level_of_education record
     
     }
-    execute_ conn "DELETE FROM studentData"
     execute conn "INSERT INTO studentData VALUES (?,?,?,?)" entry
-    print "s"
 
+
+{-
+    REGION - Student Background 
+-}
+
+instance ToRow StudentBackgroundDetails where
+    toRow (StudentBackgroundDetails student_roll_no lunch test_preparation_course)
+        = toRow (student_roll_no, lunch, test_preparation_course)
+
+insertRowsForStudentBackgroundDetails :: Connection -> StudentBackgroundDetails -> IO ()
+insertRowsForStudentBackgroundDetails conn record = do
+    
+    let entry = StudentBackgroundDetails {
+        lunch = lunch record,
+        test_preparation_course= test_preparation_course record,
+        student_roll_no = student_roll_no record 
+    
+    }
+    execute conn "INSERT INTO studentBackgroundDetails VALUES (?,?,?)" entry
+    print "stu-bd"
 
 saveRecords :: Connection -> [StudentPersonalDetails] -> IO ()
 saveRecords conn = mapM_ (insertRows conn)
 
+saveStudentBackgroundRecords :: Connection -> [StudentBackgroundDetails] -> IO ()
+saveStudentBackgroundRecords conn = mapM_ (insertRowsForStudentBackgroundDetails conn)
 
 
+
+
+instance FromRow StudentPersonalDetails where
+    fromRow = StudentPersonalDetails <$> field <*> field <*> field <*> field
+
+getStudentsData :: Connection -> IO [StudentPersonalDetails]
+getStudentsData conn = do
+    print "Enter country name > "
+    countryName <- getLine
+    let sql_query = "Select * from studentData where 1=?"
+    query conn sql_query [countryName]
 
 -- insertRowsAndReturnValues :: Connection -> [Record] -> IO ()
 -- insertRowsAndReturnValues conn = mapM_ (insertRows conn)
@@ -108,3 +129,12 @@ insertRowsScore conn record2 = do
 
 saveRecordsScore :: Connection -> [StudentScores] -> IO ()
 saveRecordsScore conn = mapM_ (insertRowsScore conn)
+
+
+
+getGenderRatio :: Connection -> IO()
+getGenderRatio conn = do
+    print "lol"
+    countryEntries <- getStudentsData conn
+    let total = sum (map roll_no countryEntries)
+    print $ "Total entries: " ++ show(total)
