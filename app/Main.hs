@@ -21,7 +21,7 @@ main = do
     putStrLn "  (1) Download data              "
     -- putStrLn "  (2) All entries by country     "
     -- putStrLn "  (3) Total cases by country     "
-    -- putStrLn "  (4) Quit                       "
+    putStrLn "  (4) Quit                       "
     putStrLn "---------------------------------"
     conn <- createTables
     -- hSetBuffering stdout NoBuffering
@@ -29,7 +29,7 @@ main = do
     option <- readLn :: IO Int
     case option of
         1 -> do
-            let url = "https://students.free.beeceptor.com/students"
+            let url = "https://students1.free.beeceptor.com/students"
             print "Downloading Student Data..."
             response <- pullData url
             print response
