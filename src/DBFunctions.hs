@@ -13,12 +13,21 @@ import Database.SQLite.Simple
 
 createTables :: IO Connection
 createTables = do
-        conn <- open "student_data.sqlite"
+        conn <- open "covid.sqlite"
         execute_ conn "CREATE TABLE IF NOT EXISTS studentData (\
             \roll_no INT NOT NULL PRIMARY KEY, \
             \gender VARCHAR(6) NOT NULL, \
             \ethnicity VARCHAR(50) NOT NULL, \
             \parental_level_of_education VARCHAR(20) DEFAULT NULL \
+            \)"
+        execute_ conn "CREATE TABLE IF NOT EXISTS entries (\
+            \date VARCHAR(40) NOT NULL, \
+            \day VARCHAR(40) NOT NULL, \
+            \month VARCHAR(40) NOT NULL, \
+            \year VARCHAR(40) NOT NULL, \
+            \cases INT DEFAULT NULL, \
+            \deaths INT DEFAULT NULL, \
+            \fk_country INTEGER\
             \)"
         return conn
 
