@@ -9,6 +9,7 @@ module DBFunctions (
 
 import DataModel
 import Database.SQLite.Simple
+import Text.SimpleTableGenerator
 
 
 instance FromRow StudentPersonalDetails where
@@ -22,9 +23,11 @@ instance ToRow StudentPersonalDetails where
     Row instance creation Region 
 -}
 
+
 data Scores = Scores Int Int Int Int deriving (Show)
-instance FromRow Scores where
-  fromRow = Scores <$> field <*> field <*> field <*> field 
+instance FromRow StudentScores where
+  fromRow = StudentScores <$> field <*> field <*> field <*> field
+
 instance ToRow Scores where
     toRow (Scores roll_no math writing reading) 
         = toRow (roll_no, math, writing, reading)
@@ -125,19 +128,39 @@ saveRecords conn = mapM_ (insertRows conn)
 
 --Analysis 1.
 -- Get Ratio of male vs female students
-getStudentsData :: Connection -> IO [StudentPersonalDetails]
+getStudentsData :: Connection -> IO [StudentScores]
 getStudentsData conn = do
-    print "Enter country name > "
-    countryName <- getLine
-    let sql_query = "Select * from studentData where 1=?"
-    query conn sql_query [countryName]
+    let roll_no = 0 :: Int 
+    let sql_query = "Select roll_no,math as math_scores, reading as reading_score ,writing as writing_score  from studentScores where roll_no > ?"
+    query conn sql_query [roll_no]
 
 getGenderRatio :: Connection -> IO()
 getGenderRatio conn = do
-    print "lol"
-    countryEntries <- getStudentsData conn
-    let total = sum (map roll_no countryEntries)
-    print $ "Total entries: " ++ show(total)
+    score_response1 <- getStudentsData conn
+    let entries_count = length score_response1
+    let total_math_marks = sum (map math_score score_response1)
+    let total_reading_marks = sum (map reading_score score_response1)
+    let total_writing_marks = sum (map writing_score score_response1)
+    
+    let avg_math_score = div total_math_marks entries_count
+    let avg_reading_score = div total_reading_marks entries_count
+    let avg_writing_score = div total_writing_marks entries_count
+
+    -- let total = sum (map roll_no countryEntries)
+    putStr "Total Math score : "
+    putStrLn (show total_math_marks) 
+    putStr "Average Math score : "
+    putStrLn (show avg_math_score)
+    
+    putStr "Total Reading score : "
+    putStrLn (show total_reading_marks) 
+    putStr "Average Reading score : "
+    putStrLn (show avg_reading_score)
+    putStrLn $ makeDefaultSimpleTable [["    ","Math","Reading","Writing"], ["Total",(show total_math_marks),(show total_reading_marks),(show total_writing_marks)], ["Average", (show avg_math_score),(show avg_reading_score),(show avg_writing_score)]]
+
+
+
+    -- print $ "Total entries: " ++ show(total)
 
 {-
     Analysis region ENDS

@@ -27,6 +27,7 @@ main = do
     putStrLn "---------------------------------"
     conn <- createTables
     -- hSetBuffering stdout NoBuffering
+    -- let option = 1  :: Int
     
     option <- readLn :: IO Int
     case option of
@@ -50,7 +51,7 @@ main = do
                     putStrLn "- Done"
                     putStrLn "------- Finished Tasks -------"
 
-                    -- getGenderRatio conn
+                    getGenderRatio conn
                     main
         -- 2 -> do
         --     entries <- queryCountryAllEntries conn

@@ -25,6 +25,8 @@ dependencies:
 - sqlite-simple
 - bytestring
 - aeson
+- SimpleTableGenerator
+
 
 library:
   source-dirs: src

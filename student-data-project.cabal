@@ -34,7 +34,8 @@ library
   hs-source-dirs:
       src
   build-depends:
-      aeson
+      SimpleTableGenerator
+    , aeson
     , base >=4.7 && <5
     , bytestring
     , http-conduit
@@ -49,7 +50,8 @@ executable student-data-project-exe
       app
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      aeson
+      SimpleTableGenerator
+    , aeson
     , base >=4.7 && <5
     , bytestring
     , http-conduit
@@ -66,7 +68,8 @@ test-suite student-data-project-test
       test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      aeson
+      SimpleTableGenerator
+    , aeson
     , base >=4.7 && <5
     , bytestring
     , http-conduit

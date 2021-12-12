@@ -3,9 +3,18 @@
 
 module DataModel(
     StudentPersonalDetails(..),
-    StudentPersonalDetailsGrouped(..)
+    StudentPersonalDetailsGrouped(..),
+    StudentScores(..)
 ) where
 import GHC.Generics
+
+
+data StudentScores = StudentScores{
+    roll_no_score:: Int,
+    math_score :: Int,
+    reading_score :: Int, 
+    writing_score :: Int
+    } deriving (Show,Generic)
 
 data StudentPersonalDetails = StudentPersonalDetails{
     roll_no:: Int,
