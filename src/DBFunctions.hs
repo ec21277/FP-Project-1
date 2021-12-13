@@ -4,7 +4,8 @@ module DBFunctions (
     createTables,
     saveRecords,
     getGenderRatio,
-    deleteOldEntries
+    deleteOldEntries,
+    getMinMaxMarks
 ) where 
 
 import DataModel
@@ -159,9 +160,37 @@ getGenderRatio conn = do
     putStrLn $ makeDefaultSimpleTable [["    ","Math","Reading","Writing"], ["Total",(show total_math_marks),(show total_reading_marks),(show total_writing_marks)], ["Average", (show avg_math_score),(show avg_reading_score),(show avg_writing_score)]]
 
 
+-- Analysis 2 Highest / Lowest Marks Overall
+getMinMaxMarks :: Connection -> IO()
+getMinMaxMarks conn = do
+    score_response1 <- getStudentsData conn
+    let min_math_marks = foldr min 0 (map math_score score_response1)
+    let min_read_marks = foldr min 0 (map reading_score score_response1)
+    let min_write_marks = foldr min 0 (map writing_score score_response1)
+    let max_math_marks = foldr max 0 (map math_score score_response1)
+    let max_read_marks = foldr max 0 (map reading_score score_response1)
+    let max_write_marks = foldr max 0 (map writing_score score_response1)
+    putStr "Min Math score : "
+    putStrLn (show min_math_marks)
+    putStr "Min Reading score : "
+    putStrLn (show min_read_marks)
+    putStr "Min Writing score : "
+    putStrLn (show min_write_marks)
+    putStr "Max Math score : "
+    putStrLn (show max_math_marks)
+    putStr "Max Reading score : "
+    putStrLn (show max_read_marks)
+    putStr "Max Writing score : "
+    putStrLn (show max_write_marks)
 
     -- print $ "Total entries: " ++ show(total)
 
+
+getStudentMarksGender :: Connection -> IO [StudentScores]
+getStudentMarksgender conn = do
+    let roll_no = 0 :: Int 
+    let sql_query = "Select roll_no,math as math_scores, reading as reading_score ,writing as writing_score from studentScores where roll_no > ?"
+    query conn sql_query [roll_no]
 {-
     Analysis region ENDS
 -}

@@ -23,7 +23,7 @@ main = do
     putStrLn "  (1) Download data              "
     -- putStrLn "  (2) All entries by country     "
     -- putStrLn "  (3) Total cases by country     "
-    -- putStrLn "  (4) Quit                       "
+    putStrLn "  (4) Quit                       "
     putStrLn "---------------------------------"
     conn <- createTables
     -- hSetBuffering stdout NoBuffering
@@ -52,6 +52,7 @@ main = do
                     putStrLn "------- Finished Tasks -------"
 
                     getGenderRatio conn
+                    getMinMaxMarks conn
                     main
         -- 2 -> do
         --     entries <- queryCountryAllEntries conn
