@@ -2,12 +2,22 @@
 
 
 module DataModel(
+    StudentDataParental(..),
     StudentPersonalDetails(..),
     StudentPersonalDetailsGrouped(..),
     StudentScores(..)
 ) where
 import GHC.Generics
 
+
+data StudentDataParental = StudentDataParental {
+    roll_no_parental :: Int,
+    gender_parental :: String,
+    parental_level_of_education_parental :: String,
+    math_parental :: Int,
+    reading_parental :: Int,
+    writing_parental :: Int
+} deriving (Show,Generic)
 
 data StudentScores = StudentScores{
     roll_no_score:: Int,

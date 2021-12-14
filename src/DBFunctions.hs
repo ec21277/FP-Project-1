@@ -186,11 +186,11 @@ getMinMaxMarks conn = do
     -- print $ "Total entries: " ++ show(total)
 
 
-getStudentMarksGender :: Connection -> IO [StudentScores]
-getStudentMarksgender conn = do
-    let roll_no = 0 :: Int 
-    let sql_query = "Select roll_no,math as math_scores, reading as reading_score ,writing as writing_score from studentScores where roll_no > ?"
-    query conn sql_query [roll_no]
+-- getStudentMarksGender :: Connection -> IO [StudentScores]
+-- getStudentMarksgender conn = do
+--     let roll_no = 0 :: Int 
+--     let sql_query = "Select roll_no,math as math_scores, reading as reading_score ,writing as writing_score from studentScores where roll_no > ?"
+--     query conn sql_query [roll_no]
 {-
     Analysis region ENDS
 -}

@@ -28,6 +28,7 @@ library
       DataModel
       DBFunctions
       Lib
+      Parental_edu
       Retrieve
   other-modules:
       Paths_student_data_project
