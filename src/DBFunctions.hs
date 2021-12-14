@@ -5,7 +5,10 @@ module DBFunctions (
     saveRecords,
     getGenderRatio,
     deleteOldEntries,
-    getMinMaxMarks
+    getMinMaxMarks,
+    -- getStudentBestSubject,
+    getMinMaxMarksGender,
+    getGenderMinMax
 ) where 
 
 import DataModel
@@ -48,6 +51,8 @@ instance ToRow StudentBackground where
     toRow (StudentBackground roll_no lunch test_preparation_course) 
         = toRow (roll_no, lunch, test_preparation_course)
 
+instance FromRow StudentScoreGender where
+  fromRow = StudentScoreGender <$> field <*> field <*> field <*> field <*> field
 {-
     Row instance creation Region  ENDS
 -}
@@ -186,11 +191,63 @@ getMinMaxMarks conn = do
     -- print $ "Total entries: " ++ show(total)
 
 
-getStudentMarksGender :: Connection -> IO [StudentScores]
-getStudentMarksgender conn = do
-    let roll_no = 0 :: Int 
-    let sql_query = "Select roll_no,math as math_scores, reading as reading_score ,writing as writing_score from studentScores where roll_no > ?"
-    query conn sql_query [roll_no]
+-- getStudentBestSubject :: Connection -> IO [StudentScores]
+-- getStudentBestSubject conn = do
+--     putStr "Enter Roll Number of Student: "
+--     rno <- getLine
+--     let sql2= "SELECT roll_no,math,reading,writing FROM studentScores where roll_no = ?"
+--     query conn sql2  [rno]
+
+-- getBestMarks :: Connection -> IO()
+-- getBestMarks conn = do 
+--     score_response1 <- getStudentsData conn
+--     let math_marks = math score_response1
+--     let reading_marks = reading score_response1
+--     let writing_marks = writing score_response1
+--     let best = max (math_marks,reading_marks,writing_marks)
+
+--     putStr "Best Scores are: "
+--     putStrLn (show best)
+
+-- getGenderMinMax :: Connection -> IO [StudentScoreGender]
+getGenderMinMax conn = do
+    putStr "Enter male or female > "
+    gen <- getLine
+
+    putStrLn gen
+    let sql_query = "Select roll_no,math as math_scores, reading as reading_score ,writing as writing_score,gender from studentScores inner join StudentData USING (roll_no) where gender = ?"
+    query conn sql_query [gen]
+
+
+
+
+-- getMinMaxMarksGender :: Connection -> IO()
+getMinMaxMarksGender conn = do
+    score_response2 <- getGenderMinMax conn
+    let min_math_marks = foldr min 0 (map math_score score_response2)
+    let min_read_marks = foldr min 0 (map reading_score score_response2)
+    let min_write_marks = foldr min 0 (map writing_score score_response2)
+    let max_math_marks = foldr max 0 (map math_score score_response2)
+    let max_read_marks = foldr max 0 (map reading_score score_response2)
+    let max_write_marks = foldr max 0 (map writing_score score_response2)
+    putStr "Min Math score : "
+    putStrLn (show min_math_marks)
+    putStr "Min Reading score : "
+    putStrLn (show min_read_marks)
+    putStr "Min Writing score : "
+    putStrLn (show min_write_marks)
+    putStr "Max Math score : "
+    putStrLn (show max_math_marks)
+    putStr "Max Reading score : "
+    putStrLn (show max_read_marks)
+    putStr "Max Writing score : "
+    putStrLn (show max_write_marks)
+
+
+
+
+
+
 {-
     Analysis region ENDS
 -}

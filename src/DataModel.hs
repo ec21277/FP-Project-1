@@ -4,7 +4,8 @@
 module DataModel(
     StudentPersonalDetails(..),
     StudentPersonalDetailsGrouped(..),
-    StudentScores(..)
+    StudentScores(..),
+    StudentScoreGender(..)
 ) where
 import GHC.Generics
 
@@ -27,6 +28,14 @@ data StudentPersonalDetails = StudentPersonalDetails{
     lunch :: String,
     test_preparation_course :: String
 } deriving (Show,Generic)
+
+data StudentScoreGender = StudentScoreGender {
+    roll_no_gen :: Int,
+    math_marks:: Int,
+    reading_marks :: Int,
+    writing_marks :: Int,
+    gender_marks :: String
+} deriving (Show, Generic)
 
 data StudentPersonalDetailsGrouped = StudentPersonalDetailsGrouped{
     records :: [StudentPersonalDetails]

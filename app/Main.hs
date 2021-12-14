@@ -21,7 +21,7 @@ main = do
     putStrLn "---------------------------------"
     putStrLn "  Welcome to our Student Data Project  "
     putStrLn "  (1) Download data              "
-    -- putStrLn "  (2) All entries by country     "
+    putStrLn "  (2) Min/Max Marks by Gender   "
     -- putStrLn "  (3) Total cases by country     "
     putStrLn "  (4) Quit                       "
     putStrLn "---------------------------------"
@@ -52,12 +52,16 @@ main = do
                     putStrLn "------- Finished Tasks -------"
 
                     getGenderRatio conn
-                    getMinMaxMarks conn
+
+                    -- -- getStudentBestSubject conn
+                    -- -- getBestMarks conn
+                    -- getGenderMinMax conn
+                    -- getMinMaxMarksGender conn
+
                     main
-        -- 2 -> do
-        --     entries <- queryCountryAllEntries conn
-        --     mapM_ print entries
-        --     main
+        2 -> do
+                getMinMaxMarksGender conn
+                main
         -- 3 -> do
         --     queryCountryTotalCases conn
         --     main
