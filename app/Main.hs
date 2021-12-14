@@ -5,6 +5,8 @@ import Lib
 import System.IO
 import DBFunctions
 import DataModel
+import Parental_edu
+
 
 -- let URL1 = https://students.free.beeceptor.com/students
 -- let glitchURL = "https://student-data-set.glitch.me/studentData"
@@ -21,13 +23,17 @@ main = do
     putStrLn "---------------------------------"
     putStrLn "  Welcome to our Student Data Project  "
     putStrLn "  (1) Download data              "
+<<<<<<< HEAD
     putStrLn "  (2) Min/Max Marks by Gender   "
+=======
+    putStrLn "  (2) Analysis on Parental education     "
+>>>>>>> 6ad7692395840ae2429eeeeda18b62ed736706d6
     -- putStrLn "  (3) Total cases by country     "
     putStrLn "  (4) Quit                       "
     putStrLn "---------------------------------"
     conn <- createTables
     -- hSetBuffering stdout NoBuffering
-    -- let option = 1  :: Int
+    -- let option = 2  :: Int
     
     option <- readLn :: IO Int
     case option of
@@ -62,6 +68,8 @@ main = do
         2 -> do
                 getMinMaxMarksGender conn
                 main
+            showParentalAnalysis conn
+            -- main
         -- 3 -> do
         --     queryCountryTotalCases conn
         --     main
