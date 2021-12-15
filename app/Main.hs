@@ -7,6 +7,8 @@ import DBFunctions
 import DataModel
 import Parental_edu
 
+import AverageMarks
+
 
 -- let URL1 = https://students.free.beeceptor.com/students
 -- let glitchURL = "https://student-data-set.glitch.me/studentData"
@@ -24,6 +26,7 @@ main = do
     putStrLn "  Welcome to our Student Data Project  "
     putStrLn "  (1) Download data              "
     putStrLn "  (2) Analysis on Parental education     "
+    putStrLn "  (3) List of ppl whose average is more than 50     "
     -- putStrLn "  (3) Total cases by country     "
     putStrLn "  (4) Quit                       "
     putStrLn "---------------------------------"
@@ -59,8 +62,7 @@ main = do
         2 -> do
             showParentalAnalysis conn
             -- main
-        -- 3 -> do
-        --     queryCountryTotalCases conn
-        --     main
+        3 -> do
+            showAverageMarks conn
         4 -> print "Hope you've enjoyed using the app!"
         otherwise -> print "Invalid option"

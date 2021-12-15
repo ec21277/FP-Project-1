@@ -5,7 +5,8 @@ module DataModel(
     StudentDataParental(..),
     StudentPersonalDetails(..),
     StudentPersonalDetailsGrouped(..),
-    StudentScores(..)
+    StudentScores(..),
+    StudentAverageData(..)
 ) where
 import GHC.Generics
 
@@ -17,6 +18,13 @@ data StudentDataParental = StudentDataParental {
     math_parental :: Int,
     reading_parental :: Int,
     writing_parental :: Int
+} deriving (Show,Generic)
+
+data StudentAverageData = StudentAverageData {
+    roll_no_for_avg :: Int,
+    math_for_avg :: Int,
+    reading_for_avg :: Int,
+    writing_for_avg :: Int
 } deriving (Show,Generic)
 
 data StudentScores = StudentScores{
