@@ -6,6 +6,7 @@ import System.IO
 import DBFunctions
 import DataModel
 import Parental_edu
+import GenderFilters
 
 
 -- let URL1 = https://students.free.beeceptor.com/students
@@ -23,11 +24,8 @@ main = do
     putStrLn "---------------------------------"
     putStrLn "  Welcome to our Student Data Project  "
     putStrLn "  (1) Download data              "
-<<<<<<< HEAD
-    putStrLn "  (2) Min/Max Marks by Gender   "
-=======
+    putStrLn "  (3) Marks by Gender   "
     putStrLn "  (2) Analysis on Parental education     "
->>>>>>> 6ad7692395840ae2429eeeeda18b62ed736706d6
     -- putStrLn "  (3) Total cases by country     "
     putStrLn "  (4) Quit                       "
     putStrLn "---------------------------------"
@@ -65,13 +63,11 @@ main = do
                     -- getMinMaxMarksGender conn
 
                     main
-        2 -> do
-                getMinMaxMarksGender conn
-                main
+        2 -> do 
             showParentalAnalysis conn
-            -- main
-        -- 3 -> do
-        --     queryCountryTotalCases conn
-        --     main
+            main
+        3 -> do
+            showGenderAnalysis conn
+            main            
         4 -> print "Hope you've enjoyed using the app!"
         otherwise -> print "Invalid option"
