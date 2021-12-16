@@ -1,10 +1,10 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module AverageMarks(
-    showAverageMarks
+    showAverageMarksBasedOnPrepAndNonPrep
 )
 where
-import DataModel
+import Types
 import Database.SQLite.Simple
     ( query, field, Connection, FromRow(..), close )
 -- import Data.List
@@ -13,26 +13,47 @@ import Text.SimpleTableGenerator
 average_data = [] :: [String]
 
 instance FromRow StudentAverageData where
-  fromRow = StudentAverageData <$> field <*> field <*> field <*> field  
+  fromRow = StudentAverageData <$> field <*> field <*> field <*> field  <*> field  
 
-getStudentsDataForAverageMarks :: Connection -> IO [StudentAverageData]
-getStudentsDataForAverageMarks conn = do
-    let roll_no = 1 :: Int 
-    let sql_query = "Select studentData.roll_no,math,reading,writing FROM studentData INNER JOIN studentScores ON studentData.roll_no = studentScores.roll_no AND 1=?"
-    query conn sql_query [roll_no]
+averageMarksForNoTestPrep :: Connection -> IO [StudentAverageData]
+averageMarksForNoTestPrep conn = do
+    let test_prep = "none" :: String 
+    let sql_query = "Select studentScores.roll_no ,math,reading,writing, studentBackgroundDetails.test_preparation_course FROM studentScores INNER JOIN studentBackgroundDetails ON studentBackgroundDetails.roll_no = studentScores.roll_no AND test_preparation_course=?"
+    query conn sql_query [test_prep]
 
-getAverageMarks :: Connection  -> IO [StudentAverageData ]
-getAverageMarks conn = do
-    let roll_no = 1 :: Int 
-    let sql_query = "Select studentData.roll_no, AVG( reading ) FROM `studentData` INNER JOIN studentScores ON studentData.roll_no = studentScores.roll_no AND 1=?"
-    query conn sql_query [roll_no]
+averageMarksForCompletedTestPrep :: Connection -> IO [StudentAverageData]
+averageMarksForCompletedTestPrep conn = do
+    let test_prep = "completed" :: String 
+    let sql_query = "Select studentScores.roll_no ,math,reading,writing, studentBackgroundDetails.test_preparation_course FROM studentScores INNER JOIN studentBackgroundDetails ON studentBackgroundDetails.roll_no = studentScores.roll_no AND test_preparation_course=?"
+    query conn sql_query [test_prep]
 
-    -- avg :: Int -> Int -> Float
 
-showAverageMarks :: Connection -> IO ()
-showAverageMarks conn = do
-    print "student avg marks:: "
-    studentData <- getAverageMarks conn
-    print studentData
-    close conn
-    print "showAverageMarks fn"
+-- getGenderRatio :: Connection -> IO()
+showAverageMarksBasedOnPrepAndNonPrep conn = do
+    score_response1 <- averageMarksForNoTestPrep conn
+    let entries_count = length score_response1
+    let total_math_marks = sum (map math_for_avg score_response1)
+    let total_reading_marks = sum (map reading_for_avg score_response1)
+    let total_writing_marks = sum (map writing_for_avg score_response1)
+    
+    let avg_math_score = div total_math_marks entries_count
+    let avg_reading_score = div total_reading_marks entries_count
+    let avg_writing_score = div total_writing_marks entries_count
+
+    putStrLn $ makeDefaultSimpleTable [["    ","Math","Reading","Writing"], ["Total",(show total_math_marks),(show total_reading_marks),(show total_writing_marks)], ["Average", (show avg_math_score),(show avg_reading_score),(show avg_writing_score)]]
+
+
+    score_response1 <- averageMarksForCompletedTestPrep conn
+    let entries_count = length score_response1
+    let total_math_marks = sum (map math_for_avg score_response1)
+    let total_reading_marks = sum (map reading_for_avg score_response1)
+    let total_writing_marks = sum (map writing_for_avg score_response1)
+    
+    let avg_math_score = div total_math_marks entries_count
+    let avg_reading_score = div total_reading_marks entries_count
+    let avg_writing_score = div total_writing_marks entries_count
+
+    putStrLn $ makeDefaultSimpleTable [["    ","Math","Reading","Writing"], ["Total",(show total_math_marks),(show total_reading_marks),(show total_writing_marks)], ["Average", (show avg_math_score),(show avg_reading_score),(show avg_writing_score)]]
+
+    -- TODO
+    putStrLn " It is seen that students who took the preperation course scored higher overall compared to ones who didnt take the course."

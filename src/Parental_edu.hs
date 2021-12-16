@@ -4,7 +4,7 @@ module Parental_edu(
     showParentalAnalysis
 )
 where
-import DataModel
+import Types
 import Database.SQLite.Simple
 -- import Data.List
 import Text.SimpleTableGenerator

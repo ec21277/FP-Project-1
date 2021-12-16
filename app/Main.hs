@@ -1,10 +1,10 @@
 module Main where
 
-import Retrieve
+import Fetch
 import Lib
 import System.IO
-import DBFunctions
-import DataModel
+import Database
+import Types
 import Parental_edu
 
 import AverageMarks
@@ -23,18 +23,22 @@ main = do
     let url = "https://student-data-set.herokuapp.com/StudentDataSet/get-student-data"
     response <- pullData url
     putStrLn "---------------------------------"
-    putStrLn "  Welcome to our Student Data Project  "
-    putStrLn "  (1) Download data              "
-    putStrLn "  (2) Analysis on Parental education     "
-    putStrLn "  (3) List of ppl whose average is more than 50     "
-    -- putStrLn "  (3) Total cases by country     "
-    putStrLn "  (4) Quit                       "
+    putStrLn "  Welcome to our Student Data Analysis Project (S.D.A.P.)"
+    putStrLn "  (1) Download                    "
+    putStrLn "  (2) Average marks analysis      "
+    putStrLn "  (3) Analysis of marks based on Parental Education "
+    putStrLn "  (4) Average marks based on gender"
+    putStrLn "  (5) Lowest/highest marks of a specific student based on r_no"
+    putStrLn "  (6) List of ppl whose average is more than 50     "
+    putStrLn "  (7) Class Grade distribution - Fail/pass/distinction"
+    putStrLn "  (8) List of ppl whose average is more than 50     "
+    putStrLn "  (9) Quit                       "
     putStrLn "---------------------------------"
     conn <- createTables
     -- hSetBuffering stdout NoBuffering
-    -- let option = 2  :: Int
+    let option = 3 :: Int
     
-    option <- readLn :: IO Int
+    -- option <- readLn :: IO Int
     case option of
         1 -> do
             putStrLn ""
@@ -56,13 +60,23 @@ main = do
                     putStrLn "- Done"
                     putStrLn "------- Finished Tasks -------"
 
-                    getGenderRatio conn
-                    getMinMaxMarks conn
+                    averageMarksInGeneral conn
                     main
         2 -> do
-            showParentalAnalysis conn
-            -- main
+            averageMarksInGeneral conn
+            main
         3 -> do
-            showAverageMarks conn
-        4 -> print "Hope you've enjoyed using the app!"
+            showParentalAnalysis conn
+            main
+        4 -> do
+            -- Add sakshi's function here
+            showAverageMarksBasedOnPrepAndNonPrep conn 
+            main
+        5 -> do
+            -- #TODO
+            showAverageMarksBasedOnPrepAndNonPrep conn
+        6 -> do
+            -- #TODO
+            showAverageMarksBasedOnPrepAndNonPrep conn
+        7 -> print "Hope you've enjoyed using the app!"
         otherwise -> print "Invalid option"
