@@ -11,6 +11,11 @@ module Types(
 import GHC.Generics
 
 
+{- 
+Creates data models StudentDataParental, StudentAverageData,
+                    StudentScores,       StudentPersonalDetails
+-}
+
 data StudentDataParental = StudentDataParental {
     roll_no_parental :: Int,
     gender_parental :: String,

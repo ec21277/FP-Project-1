@@ -13,6 +13,7 @@ import AverageMarks
 -- let URL1 = https://students.free.beeceptor.com/students
 -- let glitchURL = "https://student-data-set.glitch.me/studentData"
 
+
 main :: IO ()
 main = do
     putStrLn ""
@@ -20,6 +21,7 @@ main = do
     putStrLn "---------------------------------"
     putStrLn   "       Initializing System."
     putStrLn "---------------------------------"
+    -- url for JSON data for the student data set
     let url = "https://student-data-set.herokuapp.com/StudentDataSet/get-student-data"
     response <- pullData url
     putStrLn "---------------------------------"
@@ -42,6 +44,7 @@ main = do
     case option of
         1 -> do
             putStrLn ""
+            -- | Downloads, parses data
             putStr "Downloading Student Data "
             response <- pullData url
             json <- pullData url

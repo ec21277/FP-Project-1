@@ -45,11 +45,19 @@ instance ToRow StudentBackground where
     toRow (StudentBackground roll_no lunch test_preparation_course) 
         = toRow (roll_no, lunch, test_preparation_course)
 
-{-
+{- |
     Row instance creation Region  ENDS
 -}
 
 
+{- | 
+
+Creates 3 tables. Namely: studentDataSet, studentBackgroundDetails, and studentScores 
+Then, it inserts records into them sequentially
+
+Checks if the tables exist already and creates them if they don't
+
+-}
 createTables :: IO Connection
 createTables = do
         conn <- open "studentDataSet.sqlite"
@@ -120,7 +128,7 @@ saveRecords :: Connection -> [StudentPersonalDetails] -> IO ()
 saveRecords conn = mapM_ (insertRows conn)
 
 
-{-
+{- | 
     Analysis region
 -}
 

@@ -15,6 +15,10 @@ average_data = [] :: [String]
 instance FromRow StudentAverageData where
   fromRow = StudentAverageData <$> field <*> field <*> field <*> field  <*> field  
 
+{- 
+Compare the marks scored by students who took 
+test prep and marks of students who didn't take it
+-}
 averageMarksForNoTestPrep :: Connection -> IO [StudentAverageData]
 averageMarksForNoTestPrep conn = do
     let test_prep = "none" :: String 
@@ -36,6 +40,7 @@ showAverageMarksBasedOnPrepAndNonPrep conn = do
     let total_reading_marks = sum (map reading_for_avg score_response1)
     let total_writing_marks = sum (map writing_for_avg score_response1)
     
+    -- | Find average marks of the 3 subjects
     let avg_math_score = div total_math_marks entries_count
     let avg_reading_score = div total_reading_marks entries_count
     let avg_writing_score = div total_writing_marks entries_count
@@ -45,10 +50,13 @@ showAverageMarksBasedOnPrepAndNonPrep conn = do
 
     score_response1 <- averageMarksForCompletedTestPrep conn
     let entries_count = length score_response1
+
+    -- | Find total marks of the 3 subjects individually
     let total_math_marks = sum (map math_for_avg score_response1)
     let total_reading_marks = sum (map reading_for_avg score_response1)
     let total_writing_marks = sum (map writing_for_avg score_response1)
     
+    -- | average = total marks / total count
     let avg_math_score = div total_math_marks entries_count
     let avg_reading_score = div total_reading_marks entries_count
     let avg_writing_score = div total_writing_marks entries_count

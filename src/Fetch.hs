@@ -5,6 +5,7 @@ module Fetch
 ) where
 
 
+
 import qualified Data.ByteString.Lazy.Char8 as L8
 import Network.HTTP.Simple
 import Types
@@ -13,6 +14,7 @@ import Data.Aeson
 
 type URL = String
 
+-- | Fetches the data from given URL
 pullData :: URL -> IO L8.ByteString
 pullData url = do 
     request <- parseRequest url
@@ -20,10 +22,8 @@ pullData url = do
     return $ getResponseBody response
 
 
-renameFields "date" = "dateRep"
-renameFields "continent" = "continentExp" 
-renameFields "country" = "countriesAndTerritories" 
-renameFields "population" = "popData2019"
+
+renameFields "math" = "math"
 renameFields other = other
 
 customOptions = defaultOptions {
