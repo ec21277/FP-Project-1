@@ -5,7 +5,6 @@ module Fetch
 ) where
 
 
-
 import qualified Data.ByteString.Lazy.Char8 as L8
 import Network.HTTP.Simple
 import Types

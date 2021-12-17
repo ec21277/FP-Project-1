@@ -28,8 +28,10 @@ library
       AverageMarks
       Database
       Fetch
+      GenderFilters
       Lib
       Parental_edu
+      ParseGradeDistribution
       Types
   other-modules:
       Paths_student_data_project

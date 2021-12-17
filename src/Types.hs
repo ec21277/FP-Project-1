@@ -6,7 +6,9 @@ module Types(
     StudentPersonalDetails(..),
     StudentPersonalDetailsGrouped(..),
     StudentScores(..),
-    StudentAverageData(..)
+    StudentAverageData(..),
+    StudentScoreGender(..),
+    StudentGrades(..)
 ) where
 import GHC.Generics
 
@@ -55,3 +57,17 @@ data StudentPersonalDetails = StudentPersonalDetails{
 data StudentPersonalDetailsGrouped = StudentPersonalDetailsGrouped{
     records :: [StudentPersonalDetails]
 } deriving (Show,Generic)
+
+data StudentScoreGender = StudentScoreGender {
+    roll_no_gen :: Int,
+    math_marks:: Int,
+    reading_marks :: Int,
+    writing_marks :: Int,
+    gender_marks :: String
+} deriving (Show, Generic)
+
+data StudentGrades = StudentGrades {
+    distinction:: Int,
+    pass :: Int,
+    failure :: Int
+} deriving (Show, Generic)

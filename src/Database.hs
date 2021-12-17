@@ -70,13 +70,13 @@ createTables = do
         execute_ conn "CREATE TABLE IF NOT EXISTS studentBackgroundDetails (\
             \lunch VARCHAR(20) NOT NULL, \
             \test_preparation_course VARCHAR(20) NOT NULL, \
-            \roll_no INT NOT NULL \
+            \roll_no INT NOT NULL, FOREIGN KEY(roll_no) REFERENCES studentData(roll_no) \
             \)"
         execute_ conn "CREATE TABLE IF NOT EXISTS studentScores (\
             \roll_no INT NOT NULL PRIMARY KEY, \
             \math INT NOT NULL, \
             \reading INT NOT NULL, \
-            \writing NOT NULL \
+            \writing NOT NULL , FOREIGN KEY(roll_no) REFERENCES studentData(roll_no)\
             \)"
         return conn
 
@@ -128,7 +128,7 @@ saveRecords :: Connection -> [StudentPersonalDetails] -> IO ()
 saveRecords conn = mapM_ (insertRows conn)
 
 
-{- | 
+{-
     Analysis region
 -}
 
@@ -152,6 +152,7 @@ averageMarksInGeneral conn = do
     let avg_reading_score = div total_reading_marks entries_count
     let avg_writing_score = div total_writing_marks entries_count
 
+    putStr "Basic Marks Distribution : "
     putStr "Total Math score : "
     putStrLn (show total_math_marks) 
     putStr "Average Math score : "
