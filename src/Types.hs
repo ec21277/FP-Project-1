@@ -8,14 +8,17 @@ module Types(
     StudentScores(..),
     StudentAverageData(..),
     StudentScoreGender(..),
-    StudentGrades(..)
+    StudentGrades(..),
+    StudentScoreEthnicity(..)
 ) where
 import GHC.Generics
 
 
 {- 
 Creates data models StudentDataParental, StudentAverageData,
-                    StudentScores,       StudentPersonalDetails
+                    StudentScores,       StudentPersonalDetails , 
+                    StudentScoreGender, StudentGrades, 
+                    StudentScoreEthnicity
 -}
 
 data StudentDataParental = StudentDataParental {
@@ -71,3 +74,12 @@ data StudentGrades = StudentGrades {
     pass :: Int,
     failure :: Int
 } deriving (Show, Generic)
+
+
+data StudentScoreEthnicity = StudentScoreEthnicity {
+    roll_no_eth :: Int, 
+    math_marks_eth :: Int,
+    reading_marks_eth :: Int,
+    writing_marks_eth :: Int,
+    ethnicity_marks :: String 
+} deriving (Show,Generic)

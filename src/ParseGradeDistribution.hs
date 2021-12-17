@@ -8,6 +8,7 @@ import Types
 import Database.SQLite.Simple
 import Data.List
 import Text.SimpleTableGenerator
+import Plot
 
 instance FromRow StudentGrades where
   fromRow = StudentGrades <$> field <*> field <*> field  
@@ -28,4 +29,6 @@ showGradeAnalysis conn = do
 
     let printableResponse = [["Student Grade Distribution","Students with Distinction","Students with Pass","Students who Failed"],["Number",show (distinction_num),show (pass_num),show (fail_num )]]
     putStrLn $ makeDefaultSimpleTable printableResponse
+
+
 

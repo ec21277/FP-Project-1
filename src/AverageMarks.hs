@@ -9,6 +9,7 @@ import Database.SQLite.Simple
     ( query, field, Connection, FromRow(..), close )
 -- import Data.List
 import Text.SimpleTableGenerator
+import Plot
 
 average_data = [] :: [String]
 
@@ -65,3 +66,6 @@ showAverageMarksBasedOnPrepAndNonPrep conn = do
 
     -- TODO
     putStrLn " It is seen that students who took the preperation course scored higher overall compared to ones who didnt take the course."
+    
+    plotChart "TestPrep.html" [avg_math_score,avg_reading_score,avg_writing_score]
+

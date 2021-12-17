@@ -26,6 +26,13 @@ dependencies:
 - bytestring
 - aeson
 - SimpleTableGenerator
+- lucid
+- microlens
+- microlens-th
+- plotlyhs
+- text
+- gnuplot
+- containers
 
 
 library:

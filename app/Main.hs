@@ -9,10 +9,23 @@ import Parental_edu
 import GenderFilters
 import ParseGradeDistribution
 import AverageMarks
+import EthnicityFilters
+
+import Lucid
+import Lucid.Html5
+import Graphics.Plotly
+import Graphics.Plotly.Lucid
+import Lens.Micro
+
+import qualified Data.Text.Lazy as T
+import qualified Data.Text.Lazy.IO as T
+
+import Plot 
 
 
 -- let URL1 = https://students.free.beeceptor.com/students
 -- let glitchURL = "https://student-data-set.glitch.me/studentData"
+
 
 main :: IO ()
 main = do
@@ -27,12 +40,12 @@ main = do
     putStrLn "  (1) Download                    "
     putStrLn "  (2) Average marks analysis      "
     putStrLn "  (3) Analysis of marks based on Parental Education "
-    putStrLn "  (4) Average marks based on gender"
-    putStrLn "  (5) Lowest/highest marks of a specific student based on r_no"
-    putStrLn "  (6) List of ppl whose average is more than 50     "
+    putStrLn "  (4) Analysis of  Marks based on Gender"
+    putStrLn "  (5) Analysis of Marks based on extra Preperation Course"
+    putStrLn "  (6) Analysis of Marks based on Ethnicity     "
     putStrLn "  (7) Class Grade distribution - Fail/Pass/Distinction"
-    putStrLn "  (8)                                                 "
-    putStrLn "  (9) Quit                       "
+    -- putStrLn "  (8)                                                 "
+    putStrLn "  (8) Quit                       "
     putStrLn "---------------------------------"
     conn <- createTables
     -- hSetBuffering stdout NoBuffering
@@ -67,15 +80,16 @@ main = do
             showParentalAnalysis conn
             main
         4 -> do
-            -- Add sakshi's function here
             showGenderAnalysis conn 
             main
         5 -> do
             -- #TODO
             showAverageMarksBasedOnPrepAndNonPrep conn
+            main
         6 -> do
             -- #TODO
-            showAverageMarksBasedOnPrepAndNonPrep conn
+            showEthnicityAnalysis conn
+            main
         7 -> do
             showGradeAnalysis conn
             main

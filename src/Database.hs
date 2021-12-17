@@ -10,7 +10,7 @@ module Database (
 import Types
 import Database.SQLite.Simple
 import Text.SimpleTableGenerator
-
+import Plot
 
 instance FromRow StudentPersonalDetails where
     fromRow = StudentPersonalDetails <$> field <*> field <*> field <*> field <*> field <*> field <*> field <*> field <*> field
@@ -164,6 +164,7 @@ averageMarksInGeneral conn = do
     putStrLn (show avg_reading_score)
     putStrLn $ makeDefaultSimpleTable [["    ","Math","Reading","Writing"], ["Total",(show total_math_marks),(show total_reading_marks),(show total_writing_marks)], ["Average", (show avg_math_score),(show avg_reading_score),(show avg_writing_score)]]
 
+    plotChart "AverageMarksGeneral.html" [avg_math_score,avg_reading_score,avg_writing_score]
 
 
 -- Others

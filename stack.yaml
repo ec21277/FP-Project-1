@@ -32,6 +32,8 @@ resolver:
 packages:
 extra-deps:
 - SimpleTableGenerator-0.2.0.0
+- Histogram-0.1.0.2
+
 
 # Dependency packages to be pulled from upstream that are not in the resolver.
 # These entries can reference officially published versions as well as

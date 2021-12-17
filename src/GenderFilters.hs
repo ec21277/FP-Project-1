@@ -11,7 +11,17 @@ import Database.SQLite.Simple
 import Data.List
 import Text.SimpleTableGenerator
 
-gender_data = [] :: String 
+import Lucid
+import Lucid.Html5
+import Graphics.Plotly
+import Graphics.Plotly.Lucid
+import Lens.Micro
+
+import qualified Data.Text.Lazy as T
+import qualified Data.Text.Lazy.IO as T
+
+import Plot
+
 
 -- Get Unique values from List
 uniq :: Eq a => [a] -> [a]
@@ -58,6 +68,13 @@ analyseEachType conn level= do
     let avg_writing_score = div total_writing_marks entries_count
 
     let analysedData = [level,(show avg_math_score),show avg_reading_score, show avg_writing_score]
+    let heading = ["Level","Avg in Math","Avg in Reading", "Avg in Writing"]
 
-    putStrLn $ makeDefaultSimpleTable [analysedData]
+    putStrLn $ makeDefaultSimpleTable [heading,analysedData]
+        
+    plotChart "gender.html" [avg_math_score,avg_reading_score,avg_writing_score]
 
+    
+
+
+    

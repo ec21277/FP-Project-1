@@ -9,6 +9,8 @@ import Database.SQLite.Simple
 -- import Data.List
 import Text.SimpleTableGenerator
 
+import Plot
+
 parental_data = [] :: [String]
 -- connection :: Connection
 
@@ -63,3 +65,6 @@ analyseEachType conn level= do
     let heading = ["Level","Avg in Math","Avg in Reading", "Avg in Writing"]
     let analysedData = [level,(show avg_math_score),show avg_reading_score, show avg_writing_score]
     putStrLn $ makeDefaultSimpleTable [heading,analysedData]
+        
+    plotChart "Parental_edu.html" [avg_math_score,avg_reading_score,avg_writing_score]
+

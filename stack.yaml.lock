@@ -11,6 +11,13 @@ packages:
       sha256: 5dff719302550f6d2c419c7478e7c3aaabd0733ae18623e223d4bf20d0b97bea
   original:
     hackage: SimpleTableGenerator-0.2.0.0
+- completed:
+    hackage: Histogram-0.1.0.2@sha256:094e78070fa1d833cce39b4a1396324858c8811e3cb80b569b7407aea2b18e33,483
+    pantry-tree:
+      size: 172
+      sha256: 015d73c5158b4eb5a15e9e7f72b49dfc4e17ddf3f26cba8edb2c46cf0bab33d8
+  original:
+    hackage: Histogram-0.1.0.2
 snapshots:
 - completed:
     size: 586296
